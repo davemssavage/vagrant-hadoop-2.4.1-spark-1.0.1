@@ -10,11 +10,14 @@ HADOOP_ARCHIVE=$HADOOP_VERSION.tar.gz
 HADOOP_MIRROR_DOWNLOAD=http://archive.apache.org/dist/hadoop/core/hadoop-2.4.1/hadoop-2.4.1.tar.gz
 HADOOP_RES_DIR=/vagrant/resources/hadoop
 #spark
-SPARK_VERSION=spark-1.4.1
+SPARK_VERSION=spark-1.3.1
 SPARK_ARCHIVE=$SPARK_VERSION-bin-hadoop2.4.tgz
-SPARK_MIRROR_DOWNLOAD=http://mirrors.ibiblio.org/apache/spark/spark-1.4.1/spark-1.4.1-bin-hadoop2.4.tgz
+SPARK_MIRROR_DOWNLOAD=http://mirrors.ibiblio.org/apache/spark/spark-1.3.1/spark-1.3.1-bin-hadoop2.4.tgz
 SPARK_RES_DIR=/vagrant/resources/spark
 SPARK_CONF_DIR=/usr/local/spark/conf
+#sparkling-water
+H2O_MIRROR_DOWNLOAD=http://h2o-release.s3.amazonaws.com/sparkling-water/master/103/sparkling-water-0.2.103.zip
+H2O_ARCHIVE=sparkling-water-0.2.103.zip
 #ssh
 SSH_RES_DIR=/vagrant/resources/ssh
 RES_SSH_COPYID_ORIGINAL=$SSH_RES_DIR/ssh-copy-id.original
