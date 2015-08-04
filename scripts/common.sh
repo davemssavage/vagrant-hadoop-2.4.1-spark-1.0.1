@@ -18,6 +18,7 @@ SPARK_CONF_DIR=/usr/local/spark/conf
 #sparkling-water
 H2O_MIRROR_DOWNLOAD=http://h2o-release.s3.amazonaws.com/sparkling-water/master/103/sparkling-water-0.2.103.zip
 H2O_ARCHIVE=sparkling-water-0.2.103.zip
+H2O_VERSION=sparkling-water-0.2.103
 #ssh
 SSH_RES_DIR=/vagrant/resources/ssh
 RES_SSH_COPYID_ORIGINAL=$SSH_RES_DIR/ssh-copy-id.original

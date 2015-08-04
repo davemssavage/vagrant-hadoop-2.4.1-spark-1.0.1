@@ -1,9 +1,9 @@
-vagrant-hadoop-2.4.1-spark-1.4.1
+vagrant-hadoop-2.4.1-spark-1.3.1
 ================================
 
 # Introduction
 
-Vagrant project to spin up a cluster of 4 virtual machines with Hadoop v2.4.1 and Spark v1.4.1. 
+Vagrant project to spin up a cluster of 4 virtual machines with Hadoop v2.4.1 and Spark v1.3.1 and Sparkling Water v0.2.103 
 
 1. node1 : HDFS NameNode + Spark Master
 2. node2 : YARN ResourceManager + JobHistoryServer + ProxyServer
@@ -17,7 +17,7 @@ Vagrant project to spin up a cluster of 4 virtual machines with Hadoop v2.4.1 an
 3. Run ```vagrant box add centos65 https://github.com/2creatives/vagrant-centos/releases/download/v6.5.1/centos65-x86_64-20131205.box```
 4. Git clone this project, and change directory (cd) into this project (directory).
 5. Run ```vagrant up``` to create the VM.
-6. Run ```vagrant ssh``` to get into your VM.
+6. Run ```vagrant ssh node1``` to get into your VM.
 7. Run ```vagrant destroy``` when you want to destroy and get rid of the VM.
 
 Some gotcha's.
@@ -36,71 +36,20 @@ If you have the resources (CPU + Disk Space + Memory), you may modify Vagrantfil
 You can make the VM setup even faster if you pre-download the Hadoop, Spark, and Oracle JDK into the /resources directory.
 
 1. /resources/hadoop-2.4.1.tar.gz
-2. /resources/spark-1.4.1-bin-hadoop2.tgz
+2. /resources/spark-1.3.1-bin-hadoop2.tgz
 3. /resources/jdk-7u51-linux-x64.gz
 
 The setup script will automatically detect if these files (with precisely the same names) exist and use them instead. If you are using slightly different versions, you will have to modify the script accordingly.
 
 # Post Provisioning
-After you have provisioned the cluster, you need to run some commands to initialize your Hadoop cluster. Note, you need to be root to complete these post-provisioning steps. (Type in "su" and the password is "vagrant"). 
+After you have provisioned the cluster, you need to run some commands to initialize your Hadoop and spark cluster. These are included in the script post-install.sh.
 
-SSH into node1 and issue the following command.
+1. Run ```sh post-install.sh``` to initialise the hadoop and spark clusters.
 
-1. $HADOOP_PREFIX/bin/hdfs namenode -format myhadoop
+### Test Sparkling Water
+SSH into node1 and log in as root then issue the following command.
 
-## Start Hadoop Daemons (HDFS + YARN)
-SSH into node1 and issue the following commands to start HDFS.
-
-1. $HADOOP_PREFIX/sbin/hadoop-daemon.sh --config $HADOOP_CONF_DIR --script hdfs start namenode
-2. $HADOOP_PREFIX/sbin/hadoop-daemons.sh --config $HADOOP_CONF_DIR --script hdfs start datanode
-
-SSH into node2 and issue the following commands to start YARN.
-
-1. $HADOOP_YARN_HOME/sbin/yarn-daemon.sh --config $HADOOP_CONF_DIR start resourcemanager
-2. $HADOOP_YARN_HOME/sbin/yarn-daemons.sh --config $HADOOP_CONF_DIR start nodemanager
-3. $HADOOP_YARN_HOME/sbin/yarn-daemon.sh start proxyserver --config $HADOOP_CONF_DIR
-4. $HADOOP_PREFIX/sbin/mr-jobhistory-daemon.sh start historyserver --config $HADOOP_CONF_DIR
-
-### Test YARN
-Run the following command to make sure you can run a MapReduce job.
-
-```
-yarn jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.4.1.jar pi 2 100
-```
-
-## Start Spark in Standalone Mode
-SSH into node1 and issue the following command.
-
-1. $SPARK_HOME/sbin/start-all.sh
-
-### Test Spark on YARN
-You can test if Spark can run on YARN by issuing the following command. Try NOT to run this command on the slave nodes.
-
-```
-$SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi \
-    --master yarn \
-    --num-executors 10 \
-    --executor-cores 2 \
-    $SPARK_HOME/lib/spark-examples*.jar \
-    100
-```
-
-### Test code directly on Spark	
-```
-$SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi \
-    --master spark://node1:7077 \
-    --num-executors 10 \
-    --executor-cores 2 \
-    $SPARK_HOME/lib/spark-examples*.jar \
-    100
-```
-	
-### Test Spark using Shell
-Start the Spark shell using the following command. Try NOT to run this command on the slave nodes.
-
-```
-$SPARK_HOME/bin/spark-shell --master spark://node1:7077
-```
+1. Run ```/usr/local/sparkling-water/bin/sparkling-shell```	
 
 Then go here https://spark.apache.org/docs/latest/quick-start.html to start the tutorial. Most likely, you will have to load data into HDFS to make the tutorial work (Spark cannot read data on the local file system).
 
@@ -110,7 +59,7 @@ You can check the following URLs to monitor the Hadoop daemons.
 1. [NameNode] (http://10.211.55.101:50070/dfshealth.html)
 2. [ResourceManager] (http://10.211.55.102:8088/cluster)
 3. [JobHistory] (http://10.211.55.102:19888/jobhistory)
-4. [Spark] (http://10.211.55.101:8080)
+4. [Spark] (http://10.211.55.101:8080)	
 
 # Vagrant boxes
 A list of available Vagrant boxes is shown at http://www.vagrantbox.es. 
